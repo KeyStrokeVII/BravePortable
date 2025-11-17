@@ -1,6 +1,8 @@
 # BravePortable
 
-A truly portable Brave browser that stays up-to-date automatically. No installation required, no registry traces, complete portability.
+**Windows Only** - A truly portable Brave browser that stays up-to-date automatically. No installation required, no registry traces, complete portability.
+
+> ⚠️ **Platform:** Windows 7 or later (64-bit) | Not compatible with Linux or macOS
 
 ## ✨ Key Features
 
@@ -139,12 +141,20 @@ BravePortable/
 
 | Feature | BravePortable | Portapps | Regular Install |
 |---------|--------------|----------|-----------------|
+| Platform | ✅ Windows | ✅ Windows | ✅ Win/Mac/Linux |
 | Auto-Updates | ✅ | ❌ | ✅ |
 | 100% Portable | ✅ | ✅ | ❌ |
 | Always Latest | ✅ | ❌ | ✅ |
 | Bitwarden Included | ✅ | ❌ | ❌ |
 | Registry Cleanup | ✅ | ❌ | ❌ |
 | Zero Maintenance | ✅ | ❌ | ✅ |
+
+## 💻 System Requirements
+
+- **Operating System:** Windows 7, 8, 10, or 11 (64-bit)
+- **Not compatible with:** Linux, macOS, or 32-bit Windows
+- **Disk Space:** 700 MB free
+- **Internet:** Required for updates and first-time setup
 
 ## 📝 License & Credits
 
