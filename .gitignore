@@ -1,0 +1,55 @@
+# Brave Portable - .gitignore
+
+# Development environment (root level)
+# These are for testing/development only
+app/
+profile/
+extensions/
+config.json
+BravePortable.exe
+Reorganize.ps1
+
+# Release folder content (generated during build)
+Release/Browser/
+Release/Data/
+Release/Extensions/*/
+!Release/Extensions/*.crx
+Release/config.json
+
+# Temp files
+temp/
+*.tmp
+
+# Build outputs
+brave-portable-setup.exe
+Output/
+
+# Backup files
+*.backup
+*.old
+*.bak
+
+# Windows specific
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/
+
+# PowerShell artifacts
+*.ps1.log
+*.ps1.err
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Debug files
+*.debug
+*.log
+
+# Keep directory structure
+!.gitkeep
+!Release/README.txt
+!Release/BravePortable.exe

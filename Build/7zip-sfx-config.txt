@@ -1,0 +1,22 @@
+;!@Install@!UTF-8!
+; 7-Zip SFX Configuration for BravePortable
+; Creates: brave-portable-win64.exe (like Mullvad Browser)
+;
+; How to Create the SFX:
+; 1. Download 7-Zip from https://www.7-zip.org/
+; 2. Create archive: 7z a -t7z -mx=9 BravePortable.7z BravePortable\*
+; 3. Get SFX module: C:\Program Files\7-Zip\7zSD.sfx (or 7z.sfx)
+; 4. Combine: copy /b 7zSD.sfx + 7zip-sfx-config.txt + BravePortable.7z brave-portable-win64.exe
+;
+; Configuration:
+
+Title="Brave Portable"
+BeginPrompt="Extract Brave Portable to current folder?"
+ExtractDialogText="Extracting Brave Portable..."
+ExtractPathText="Extract to:"
+ExtractTitle="Brave Portable - Extraction"
+GUIMode="2"
+OverwriteMode="2"
+InstallPath="BravePortable"
+ExecuteFile="BravePortable\BravePortable.exe"
+;!@InstallEnd@!

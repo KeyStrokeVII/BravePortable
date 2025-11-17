@@ -1,0 +1,32 @@
+Windows Registry Editor Version 5.00
+
+; BravePortable Registry Cleanup Script
+; Run this file to remove registry traces left by Brave browser
+; Double-click this file and click "Yes" to apply
+
+; Remove Brave from registered applications
+[HKEY_LOCAL_MACHINE\Software\RegisteredApplications]
+"BravePortable"=-
+"Brave"=-
+
+; Remove Brave from Start Menu Internet clients
+[-HKEY_LOCAL_MACHINE\Software\Clients\StartMenuInternet\BravePortable]
+[-HKEY_LOCAL_MACHINE\Software\Clients\StartMenuInternet\BRAVEPORTABLE.EXE]
+[-HKEY_LOCAL_MACHINE\Software\Clients\StartMenuInternet\Brave]
+[-HKEY_LOCAL_MACHINE\Software\Clients\StartMenuInternet\BraveSoftware]
+
+; Remove Brave HTML file associations
+[-HKEY_LOCAL_MACHINE\Software\Classes\BravePortableHTML]
+[-HKEY_LOCAL_MACHINE\Software\Classes\BraveHTML]
+[-HKEY_CLASSES_ROOT\BravePortableHTML]
+[-HKEY_CLASSES_ROOT\BraveHTML]
+
+; Remove Brave URL protocol handlers
+[-HKEY_LOCAL_MACHINE\Software\Classes\BravePortableURL]
+[-HKEY_LOCAL_MACHINE\Software\Classes\BraveURL]
+[-HKEY_CLASSES_ROOT\BravePortableURL]
+[-HKEY_CLASSES_ROOT\BraveURL]
+
+; Remove Brave from HKEY_CURRENT_USER (user-specific traces)
+[-HKEY_CURRENT_USER\Software\BraveSoftware]
+[-HKEY_CURRENT_USER\Software\Policies\BraveSoftware]
