@@ -154,7 +154,7 @@ BravePortable/
 - [chrlauncher](https://github.com/henrypp/chrlauncher) by Henry++
 - [Portapps](https://github.com/portapps/portapps) by @crazy-max
 
-**Built by:** Custom Agents Pro
+**Built by:** KeyStrokeVII
 
 ---
 
