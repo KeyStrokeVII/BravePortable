@@ -19,6 +19,10 @@ param(
     [switch]$UpdateOnly
 )
 
+# Load required assemblies for UI
+Add-Type -AssemblyName System.Windows.Forms
+Add-Type -AssemblyName System.Drawing
+
 # Script configuration
 $scriptPath = $MyInvocation.MyCommand.Path
 if (-not [string]::IsNullOrWhiteSpace($scriptPath)) {
@@ -52,6 +56,39 @@ $Script:DefaultConfig = @{
 }
 
 #region Functions
+
+$Script:TrayIcon = $null
+
+function Show-TrayIcon {
+    param([string]$Text)
+    
+    if ($null -eq $Script:TrayIcon) {
+        $Script:TrayIcon = New-Object System.Windows.Forms.NotifyIcon
+        # Try to use Brave's icon if available, else generic
+        if (Test-Path $Script:BraveExe) {
+            try {
+                $Script:TrayIcon.Icon = [System.Drawing.Icon]::ExtractAssociatedIcon($Script:BraveExe)
+            } catch {
+                $Script:TrayIcon.Icon = [System.Drawing.SystemIcons]::Application
+            }
+        } else {
+            $Script:TrayIcon.Icon = [System.Drawing.SystemIcons]::Application
+        }
+        $Script:TrayIcon.Visible = $true
+    }
+    
+    # Text property is limited to 63 chars
+    $Script:TrayIcon.Text = $Text.Substring(0, [Math]::Min($Text.Length, 63))
+    $Script:TrayIcon.ShowBalloonTip(3000, "Brave Portable", $Text, [System.Windows.Forms.ToolTipIcon]::Info)
+}
+
+function Hide-TrayIcon {
+    if ($null -ne $Script:TrayIcon) {
+        $Script:TrayIcon.Visible = $false
+        $Script:TrayIcon.Dispose()
+        $Script:TrayIcon = $null
+    }
+}
 
 function Write-Log {
     param([string]$Message, [string]$Level = "INFO")
@@ -373,17 +410,26 @@ function Update-Brave {
     if ($updateInfo) {
         Write-Log "Update available: v$($updateInfo.Version)" "SUCCESS"
         
+        # Notify user about the update
+        Show-TrayIcon -Text "Updating Brave to v$($updateInfo.Version)..."
+        
         if ($config.AutoDownload) {
             $installerPath = Download-BraveUpdate $updateInfo
             if ($installerPath) {
                 $success = Install-BraveUpdate $installerPath $updateInfo
                 if ($success) {
                     $config.CurrentVersion = $updateInfo.Version
+                    Show-TrayIcon -Text "Update complete! Launching Brave..."
                 }
             }
         } else {
             Write-Log "Auto-download is disabled. Set AutoDownload=true in config.json to enable" "WARN"
         }
+        
+        # Keep icon visible briefly if we're about to launch, or hide it if we're done with update logic
+        # The launcher will continue to Start-Brave, so we can leave it or hide it. 
+        # If we hide it here, the balloon tip might disappear too fast.
+        # Let's rely on the finally block to clean it up, or hide it explicitly if no launch happens.
     } else {
         Write-Log "Brave is up to date!" "SUCCESS"
     }
@@ -423,7 +469,16 @@ try {
 } catch {
     Write-Log "Unexpected error: $_" "ERROR"
     Write-Log $_.ScriptStackTrace "ERROR"
+    
+    # Show error in tray if possible
+    if ($null -ne $Script:TrayIcon) {
+        Show-TrayIcon -Text "Error: $_"
+        Start-Sleep -Seconds 5
+    }
+    
     Read-Host "Press Enter to exit"
+} finally {
+    Hide-TrayIcon
 }
 
 #endregion
