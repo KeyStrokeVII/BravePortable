@@ -92,14 +92,15 @@ function Hide-TrayIcon {
 
 function Write-Log {
     param([string]$Message, [string]$Level = "INFO")
-    $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
-    $color = switch ($Level) {
-        "ERROR" { "Red" }
-        "WARN" { "Yellow" }
-        "SUCCESS" { "Green" }
-        default { "White" }
-    }
-    Write-Host "[$timestamp] [$Level] $Message" -ForegroundColor $color
+    # Suppress console output to avoid popups in PS2EXE GUI mode
+    # $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+    # $color = switch ($Level) {
+    #     "ERROR" { "Red" }
+    #     "WARN" { "Yellow" }
+    #     "SUCCESS" { "Green" }
+    #     default { "White" }
+    # }
+    # Write-Host "[$timestamp] [$Level] $Message" -ForegroundColor $color
 }
 
 function Get-Config {
@@ -287,17 +288,16 @@ function Start-Brave {
     # Check if Brave is installed, if not trigger force update
     if (-not (Test-Path $Script:BraveExe)) {
         Write-Log "Brave not installed. Downloading latest version..." "WARN"
-        Write-Host "`nFirst launch detected - downloading Brave..." -ForegroundColor Yellow
-        Write-Host "This will take 2-3 minutes (downloading ~200 MB)...`n" -ForegroundColor Gray
+        Show-TrayIcon -Text "First launch: Downloading Brave (~200MB)..."
         
         # Trigger force update to download and install Brave
-        Update-Brave -Force $true
+        $null = Update-Brave -Force $true
         
         # Check again if Brave is now available
         if (-not (Test-Path $Script:BraveExe)) {
             Write-Log "Failed to download Brave. Please check your internet connection." "ERROR"
-            Write-Host "`nPress any key to exit..." -ForegroundColor Red
-            $null = $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+            Show-TrayIcon -Text "Error: Failed to download Brave."
+            Start-Sleep -Seconds 3
             return $false
         }
         
@@ -446,25 +446,25 @@ function Update-Brave {
 #region Main Execution
 
 try {
-    Write-Host "`n==== Brave Portable Launcher ====" -ForegroundColor Cyan
-    Write-Host "Version: 1.0`n" -ForegroundColor Cyan
+    # Write-Host "`n==== Brave Portable Launcher ====" -ForegroundColor Cyan
+    # Write-Host "Version: 1.0`n" -ForegroundColor Cyan
     
     # Handle parameters
     if ($ForceUpdate) {
         Write-Log "Force update requested" "INFO"
-        Update-Brave -Force $true
+        $null = Update-Brave -Force $true
     } elseif (-not $SkipUpdate) {
-        Update-Brave
+        $null = Update-Brave
     }
     
     # Launch browser unless update-only mode
     if (-not $UpdateOnly) {
-        Start-Brave
+        $null = Start-Brave
     } else {
         Write-Log "Update-only mode, not launching browser" "INFO"
     }
     
-    Write-Host "`n==== Brave Portable Launcher Complete ====`n" -ForegroundColor Cyan
+    # Write-Host "`n==== Brave Portable Launcher Complete ====`n" -ForegroundColor Cyan
     
 } catch {
     Write-Log "Unexpected error: $_" "ERROR"
@@ -476,7 +476,7 @@ try {
         Start-Sleep -Seconds 5
     }
     
-    Read-Host "Press Enter to exit"
+    # Read-Host "Press Enter to exit"
 } finally {
     Hide-TrayIcon
 }
