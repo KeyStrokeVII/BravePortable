@@ -21,8 +21,6 @@ No installation required, no registry traces, complete portability.
 2. Install to any folder (e.g., `C:\BravePortable` or your USB drive).
 3. Launch `BravePortable.exe`.
 
-*Prefer a ZIP? [Download the Release folder](https://github.com/KeyStrokeVII/BravePortable/releases/latest).*
-
 ## 🚀 Quick Start
 
 Just double-click **`BravePortable.exe`**.
